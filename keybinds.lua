@@ -16,6 +16,7 @@ local tagGroup = "tag";
 local audioGroup = "audio";
 local brightnessGroup = "brightness";
 local airplaneModeGroup = "airplane mode";
+local clientGroup = "client";
 
 local terminal = "kitty";
 
@@ -36,7 +37,7 @@ local globalKeybinds = {
     { name = "Print", action = function() awful.spawn("flameshot gui") end, meta = { description = "open flameshot", group = launcherGroup } },
     { modifiers = { modkey }, name = "p", action = function() awful.spawn("flameshot screen -c") end, meta = { description = "take a screenshot", group = launcherGroup } },
     { modifiers = { modkey, shiftkey }, name = "p", action = function() awful.spawn("flameshot screen -c -p ~/Pictures/Screenshots") end, meta = { description = "save a screenshot", group = launcherGroup } },
-    { modifiers = { ctrlkey, shiftkey }, name = "c", action = function() awful.spawn("gpick") end, meta = { description = "open gpick", group = launcherGroup } },
+    { modifiers = { altkey, shiftkey }, name = "c", action = function() awful.spawn("gpick") end, meta = { description = "open gpick", group = launcherGroup } },
     { modifiers = { ctrlkey, altkey }, name = "Delete", action = awesome.quit, meta = { description = "quit awesome", group = launcherGroup } },
     
     -- Window Controls
@@ -88,6 +89,21 @@ local globalKeybinds = {
     { name = "XF86Bluetooth", action = function() awful.spawn("bluetoothctl power toggle") end, meta = { description = "toggle bluetooth", group = airplaneModeGroup } }
 }
 
+local clientKeybinds = {
+    { modifiers = { modkey }, name = "F11", action = function(c) c.fullscreen = not c.fullscreen; c:raise() end, meta = { description = "toggle fullscreen", group = clientGroup } },
+    { modifiers = { altkey }, name = "F4", action = function(c) c:kill() end, meta = { description = "close", group = clientGroup } },
+    { modifiers = { altkey }, name = "XF86AudioPrev", action = function(c) c:kill() end, meta = { description = "close", group = clientGroup } },
+    { modifiers = { modkey }, name = "m", action = function(c) c.maximized = not c.maximized; c:raise() end, meta = { description = "(un)maximize", group = clientGroup } },
+    { modifiers = { modkey }, name = "n", action = function(c) c.minimized = true end, meta = { description = "minimize", group = clientGroup } },
+    { modifiers = { modkey }, name = "f", action = function(c) c.floating = not c.floating; c:raise() end, meta = { description = "toggle floating", group = clientGroup } },
+    { modifiers = { modkey }, name = "t", action = function(c) c.ontop = not c.ontop end, meta = { description = "toggle keep on top", group = clientGroup } },
+    { modifiers = { modkey }, name = "c", action = function(c) awful.placement.centered(c, { honor_workarea = true, honor_padding = true }) end, meta = { description = "center", group = clientGroup } },
+    { modifiers = { modkey }, name = "Left", action = function(c) c:relative_move(0, 0, -20, 0) end, meta = { description = "move left", group = clientGroup } },
+    { modifiers = { modkey }, name = "Right", action = function(c) c:relative_move(0, 0, 20, 0) end, meta = { description = "move right", group = clientGroup } },
+    { modifiers = { modkey }, name = "Up", action = function(c) c:relative_move(0, 0, 0, -20) end, meta = { description = "move up", group = clientGroup } },
+    { modifiers = { modkey }, name = "Down", action = function(c) c:relative_move(0, 0, 0, 20) end, meta = { description = "move down", group = clientGroup } },
+}
+
 local function formatKeys(keybinds)
     local formattedKeys = {};
     for _, keybind in ipairs(keybinds) do
@@ -103,3 +119,7 @@ local function formatKeys(keybinds)
 end
 
 root.keys(formatKeys(globalKeybinds));
+
+return {
+    clientKeybinds = formatKeys(clientKeybinds)
+};

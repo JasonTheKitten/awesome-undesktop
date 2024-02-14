@@ -1,6 +1,9 @@
 local awful = require("awful");
 local beautiful = require("beautiful");
 
+local clientKeys = require("keybinds").clientKeybinds;
+local clientButtons = require("buttonbinds").clientButtonbinds;
+
 awful.layout.layouts = {
     awful.layout.suit.max.fullscreen,
     awful.layout.suit.floating,
@@ -21,7 +24,6 @@ awful.layout.layouts = {
 };
 
 awful.rules.rules = {
-    -- Rule that all clients match
     {
         rule = {},
         properties = {
@@ -31,8 +33,27 @@ awful.rules.rules = {
             raise = true,
             screen = awful.screen.preferred,
             placement = awful.placement.no_overlap + awful.placement.no_offscreen,
-            floating = false
+            floating = false,
+            keys = clientKeys,
+            buttons = clientButtons,
         }
+    },
+    {
+        rule_any = {
+            name = {
+                "Picture in picture"
+            }
+        },
+        properties = {
+            floating = true,
+            ontop = true,
+            sticky = true,
+            focusable = false,
+            placement = awful.placement.bottom_right,
+            width = 800,
+            height = 450,
+        }
+    
     }
 };
 
