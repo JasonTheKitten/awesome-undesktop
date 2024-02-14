@@ -1,5 +1,6 @@
-local wibox = require("wibox");
+local awful = require("awful");
 local gears = require("gears");
+local wibox = require("wibox");
 
 local function getBatteryInfo()
     local handle = io.popen("acpi -b");
@@ -25,6 +26,10 @@ local batteryWidget = {
         return width, height;
     end,
     draw = function(self, mywibox, cr, width, height)
+        if not self.timer then
+            self:init()
+        end
+        
         local batteryInfo = getBatteryInfo();
         if batteryInfo.charging then
             cr:set_source_rgb(.3, 1, 0);
@@ -48,14 +53,24 @@ local batteryWidget = {
             cr:line_to(width, y);
             cr:stroke();
         end
-
-        if not self.timer then
-            local this = self;
-            self.timer = gears.timer.start_new(5, function()
-                this:emit_signal("widget::redraw_needed");
-                return true;
-            end);
-        end
+    end,
+    init = function(self)
+        local this = self;
+        self.timer = gears.timer.start_new(5, function()
+            this:emit_signal("widget::redraw_needed");
+            return true;
+        end);
+        
+        self.tooltip = awful.tooltip({
+            objects = { self },
+            timer_function = function()
+                local batteryInfo = getBatteryInfo();
+                return string.format(
+                    "Battery Level: %d%%\n%s",
+                    batteryInfo.level,
+                    batteryInfo.charging and "Charging" or "Not Charging");
+            end
+        });
     end,
     layout = wibox.widget.base.make_widget
 };
