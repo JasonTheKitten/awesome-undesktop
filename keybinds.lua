@@ -89,6 +89,12 @@ local globalKeybinds = {
     { name = "XF86Bluetooth", action = function() awful.spawn("bluetoothctl power toggle") end, meta = { description = "toggle bluetooth", group = airplaneModeGroup } }
 }
 
+for i = 0, 9 do
+    table.insert(globalKeybinds, { modifiers = { modkey }, name = tostring(i), action = function() local screen = awful.screen.focused(); local tag = screen.tags[i]; if tag then tag:view_only(); end end, meta = { description = "toggle tag #" .. i, group = tagGroup } });
+    table.insert(globalKeybinds, { modifiers = { modkey, ctrlkey }, name = tostring(i), action = function() awful.tag.viewonly(awful.screen.focused().tags[i]) end, meta = { description = "view tag #" .. i, group = tagGroup } });
+    table.insert(globalKeybinds, { modifiers = { modkey, shiftkey }, name = tostring(i), action = function() if client.focus then client.focus:move_to_tag(awful.screen.focused().tags[i]) end end, meta = { description = "move focused client to tag #" .. i, group = tagGroup } });
+end
+
 local clientKeybinds = {
     { modifiers = { modkey }, name = "F11", action = function(c) c.fullscreen = not c.fullscreen; c:raise() end, meta = { description = "toggle fullscreen", group = clientGroup } },
     { modifiers = { altkey }, name = "F4", action = function(c) c:kill() end, meta = { description = "close", group = clientGroup } },
