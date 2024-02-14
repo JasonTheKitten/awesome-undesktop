@@ -3,6 +3,7 @@ local beautiful = require("beautiful");
 local wibox = require("wibox");
 
 local batteryWidget = require("component.battery").batteryWidget;
+local timeWidget = require("component.time").timeWidget;
 
 local sidebar = {};
 
@@ -11,7 +12,7 @@ sidebar.create = function(s)
     local sidebarWibar = awful.wibar({
         position = "right",
         screen = s,
-        width = 2,
+        width = 3,
         bg = beautiful.bg_normal,
         fg = beautiful.fg_normal,
         ontop = true,
@@ -22,10 +23,22 @@ sidebar.create = function(s)
         -- Just a red rectangle
         layout = wibox.layout.align.vertical,
         {
-            widget = wibox.container.background,
-            forced_height = 100,
-            batteryWidget
-        }
+            layout = wibox.layout.fixed.vertical,
+            {
+                widget = wibox.container.background,
+                forced_height = 100,
+                batteryWidget,
+            },
+            {
+                widget = wibox.container.background,
+                forced_height = 10,
+            },
+            {
+                widget = wibox.container.background,
+                forced_height = 200,
+                timeWidget,
+            },
+        },
     });
 end
 

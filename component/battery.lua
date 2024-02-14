@@ -41,7 +41,7 @@ local batteryWidget = {
         cr:rectangle(0, height - fillHeight, width, fillHeight);
         cr:fill();
 
-        cr:set_source_rgb(.75, .75, .75);
+        cr:set_source_rgb(0, 0, 0);
         for i = 1, 9 do
             local y = (height / 10) * i;
             cr:move_to(0, y);
@@ -58,8 +58,8 @@ local batteryWidget = {
         end
     end,
     layout = wibox.widget.base.make_widget
-}
+};
 
 return {
     batteryWidget = batteryWidget
-}
+};
