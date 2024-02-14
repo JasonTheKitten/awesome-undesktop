@@ -2,11 +2,13 @@ local awful = require("awful");
 local beautiful = require("beautiful");
 local wibox = require("wibox");
 
+local batteryWidget = require("component.battery").batteryWidget;
+
 local sidebar = {};
 
 sidebar.create = function(s)
     -- Create the sidebar
-    local sidebar = awful.wibar({
+    local sidebarWibar = awful.wibar({
         position = "right",
         screen = s,
         width = 2,
@@ -16,13 +18,13 @@ sidebar.create = function(s)
     });
 
     -- Add widgets to the sidebar
-    sidebar:setup({
+    sidebarWibar:setup({
         -- Just a red rectangle
         layout = wibox.layout.align.vertical,
         {
             widget = wibox.container.background,
-            bg = "#FF0000",
             forced_height = 100,
+            batteryWidget
         }
     });
 end
